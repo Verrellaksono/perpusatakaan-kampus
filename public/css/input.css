@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@source "../pages/**/*.html";
+@source "../js/**/*.js";
+@source "../../node_modules/flowbite-datepicker/js/**/*.js";
+@source "../../node_modules/flowbite/dist/**/*.js";
+
+/* Custom styles and animations for Perpustakaan Kampus */
+
+/* Smooth scroll behaviors */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1329;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Focus rings and styling */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
+}
+
+/* Flowbite Datepicker Custom CSS overrides for background/transparency */
+.datepicker {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.datepicker-picker {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+.datepicker-cell:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.datepicker-cell.selected, .datepicker-cell.selected:hover {
+  background-color: #1d4ed8 !important; /* blue-700 */
+  color: #ffffff !important;
+}
+
+/* Dark mode support using Tailwind media query */
+@media (prefers-color-scheme: dark) {
+  .datepicker {
+    background-color: #1f2937 !important; /* gray-800 */
+    border-color: #374151 !important; /* gray-700 */
+  }
+
+  .datepicker-picker {
+    background-color: #1f2937 !important; /* gray-800 */
+    color: #f3f4f6 !important; /* gray-100 */
+  }
+
+  .datepicker-cell:hover {
+    background-color: #374151 !important; /* gray-700 */
+  }
+
+  .datepicker-cell.selected, .datepicker-cell.selected:hover {
+    background-color: #3b82f6 !important; /* blue-500 */
+    color: #ffffff !important;
+  }
+
+  .datepicker-header {
+    background-color: #1f2937 !important;
+  }
+
+  .datepicker-controls button {
+    color: #ffffff !important;
+  }
+  
+  .datepicker-controls button:hover {
+    background-color: #374151 !important;
+  }
+}

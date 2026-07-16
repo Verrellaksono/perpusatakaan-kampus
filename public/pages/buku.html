@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Manajemen Buku - Perpustakaan Kampus</title>
+
+        <!-- Stylesheet lokal dan Flowbite untuk komponen UI -->
+        <link href="../css/style.css" rel="stylesheet" />
+        <link href="/vendor/flowbite/flowbite.min.css" rel="stylesheet" />
+
+        <!-- FontAwesome untuk ikon -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <!-- Google Fonts untuk font Inter -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+        </style>
+    </head>
+    <body
+        class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen"
+    >
+        <!-- Header navigasi untuk mobile dan desktop -->
+        <nav
+            class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        >
+            <div class="px-3 py-3 lg:px-5 lg:pl-3">
+                <div class="flex items-center justify-between">
+                    <div
+                        class="flex items-center justify-start rtl:justify-end"
+                    >
+                        <button
+                            data-drawer-target="logo-sidebar"
+                            data-drawer-toggle="logo-sidebar"
+                            aria-controls="logo-sidebar"
+                            type="button"
+                            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mr-2"
+                        >
+                            <span class="sr-only">Buka Menu</span>
+                            <svg
+                                class="w-6 h-6"
+                                aria-hidden="true"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    clip-rule="evenodd"
+                                    fill-rule="evenodd"
+                                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <a href="/dashboard" class="flex ms-2 md:me-24 gap-2">
+                            <span
+                                class="self-center text-lg font-bold sm:text-xl whitespace-nowrap dark:text-white"
+                                >Perpustakaan Kampus</span
+                            >
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center ms-3">
+                            <div class="flex items-center gap-2">
+                                <span
+                                    id="adminName"
+                                    class="hidden sm:block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                                    >Admin</span
+                                >
+                                <button
+                                    id="logoutBtn"
+                                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                >
+                                    <i class="fa-solid fa-power-off mr-1"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar untuk navigasi utama -->
+        <aside
+            id="logo-sidebar"
+            class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+            aria-label="Sidebar"
+        >
+            <div
+                class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800"
+            >
+                <ul class="space-y-2 font-medium">
+                    <li>
+                        <a
+                            href="/dashboard"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-chart-line w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/buku"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-book w-5 h-5 text-blue-600 dark:text-blue-500"
+                            ></i>
+                            <span class="ms-3 text-blue-600 dark:text-blue-500"
+                                >Data Buku</span
+                            >
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/peminjam"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-users w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Data Peminjam</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/peminjaman"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-right-from-bracket w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Peminjaman Buku</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/pengembalian"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-right-to-bracket w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Pengembalian Buku</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Konten utama halaman -->
+        <div class="p-4 sm:ml-64">
+            <div class="p-4 mt-14 space-y-6">
+                <!-- Judul dan tombol tambah buku -->
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                >
+                    <div>
+                        <h1
+                            class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white"
+                        >
+                            Data Master Buku
+                        </h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Kelola katalog pustaka dan persediaan buku.
+                        </p>
+                    </div>
+                    <button
+                        data-modal-target="add-book-modal"
+                        data-modal-toggle="add-book-modal"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center gap-2"
+                    >
+                        <i class="fa-solid fa-plus"></i> Tambah Buku
+                    </button>
+                </div>
+
+                <!-- Kotak pencarian buku -->
+                <div
+                    class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+                >
+                    <label for="searchInput" class="sr-only">Search</label>
+                    <div class="relative w-full max-w-md">
+                        <div
+                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-500 dark:text-gray-400"
+                        >
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Cari judul buku..."
+                        />
+                    </div>
+                </div>
+
+                <!-- Tabel data buku (dimuat secara dinamis oleh JavaScript) -->
+                <div
+                    class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+                >
+                    <table
+                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                        >
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Judul Buku
+                                </th>
+                                <th scope="col" class="px-6 py-3">ISBN</th>
+                                <th scope="col" class="px-6 py-3">Penulis</th>
+                                <th scope="col" class="px-6 py-3">Penerbit</th>
+                                <th scope="col" class="px-6 py-3 text-center">
+                                    Tahun
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center">
+                                    Stok
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Data Tabel buku -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal untuk menambah buku baru -->
+        <div
+            id="add-book-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        >
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <div
+                    class="relative bg-white rounded-lg shadow dark:bg-gray-700"
+                >
+                    <!-- Modal header -->
+                    <div
+                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+                    >
+                        <h3
+                            class="text-lg font-semibold text-gray-900 dark:text-white"
+                        >
+                            Tambah Buku Baru
+                        </h3>
+                        <button
+                            type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="add-book-modal"
+                        >
+                            <svg
+                                class="w-3 h-3"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 14"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="addBookForm" class="p-4 md:p-5 space-y-4">
+                        <div>
+                            <label
+                                for="add_judul"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >Judul Buku</label
+                            >
+                            <input
+                                type="text"
+                                id="add_judul"
+                                required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            />
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    for="add_isbn"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >ISBN</label
+                                >
+                                <input
+                                    type="text"
+                                    id="add_isbn"
+                                    required
+                                    pattern="\d{10,13}"
+                                    title="ISBN harus berupa 10-13 digit angka"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="add_penulis"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Penulis</label
+                                >
+                                <input
+                                    type="text"
+                                    id="add_penulis"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="add_penerbit"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >Penerbit</label
+                            >
+                            <input
+                                type="text"
+                                id="add_penerbit"
+                                required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            />
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    for="add_tahun_terbit"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Tahun Terbit</label
+                                >
+                                <input
+                                    type="number"
+                                    id="add_tahun_terbit"
+                                    min="1900"
+                                    max="2026"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="add_stok"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Stok</label
+                                >
+                                <input
+                                    type="number"
+                                    id="add_stok"
+                                    min="0"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            Simpan Buku
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal untuk mengedit buku -->
+        <div
+            id="edit-book-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        >
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <div
+                    class="relative bg-white rounded-lg shadow dark:bg-gray-700"
+                >
+                    <!-- Header modal -->
+                    <div
+                        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+                    >
+                        <h3
+                            class="text-lg font-semibold text-gray-900 dark:text-white"
+                        >
+                            Edit Data Buku
+                        </h3>
+                        <button
+                            type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="edit-book-modal"
+                        >
+                            <svg
+                                class="w-3 h-3"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 14 14"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Form untuk mengedit buku -->
+                    <form id="editBookForm" class="p-4 md:p-5 space-y-4">
+                        <div>
+                            <label
+                                for="edit_judul"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >Judul Buku</label
+                            >
+                            <input
+                                type="text"
+                                id="edit_judul"
+                                required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            />
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    for="edit_isbn"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >ISBN</label
+                                >
+                                <input
+                                    type="text"
+                                    id="edit_isbn"
+                                    required
+                                    pattern="\d{10,13}"
+                                    title="ISBN harus berupa 10-13 digit angka"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="edit_penulis"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Penulis</label
+                                >
+                                <input
+                                    type="text"
+                                    id="edit_penulis"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="edit_penerbit"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >Penerbit</label
+                            >
+                            <input
+                                type="text"
+                                id="edit_penerbit"
+                                required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                            />
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    for="edit_tahun_terbit"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Tahun Terbit</label
+                                >
+                                <input
+                                    type="number"
+                                    id="edit_tahun_terbit"
+                                    min="1900"
+                                    max="2026"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="edit_stok"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >Stok</label
+                                >
+                                <input
+                                    type="number"
+                                    id="edit_stok"
+                                    min="0"
+                                    required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                />
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            Perbarui Buku
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skrip untuk Flowbite, autentikasi, dan manajemen buku -->
+        <script src="/vendor/flowbite/flowbite.min.js"></script>
+        <script src="../js/auth.js"></script>
+        <script src="../js/buku.js"></script>
+    </body>
+</html>

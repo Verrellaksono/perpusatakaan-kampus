@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard - Perpustakaan Kampus</title>
+
+        <!-- Local Stylesheets & Flowbite -->
+        <link href="../css/style.css" rel="stylesheet" />
+        <link href="/vendor/flowbite/flowbite.min.css" rel="stylesheet" />
+
+        <!-- FontAwesome for Icons -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+        </style>
+    </head>
+    <body
+        class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen"
+    >
+        <!-- Navigation Header Toggle for Mobile -->
+        <nav
+            class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        >
+            <div class="px-3 py-3 lg:px-5 lg:pl-3">
+                <div class="flex items-center justify-between">
+                    <div
+                        class="flex items-center justify-start rtl:justify-end"
+                    >
+                        <button
+                            data-drawer-target="logo-sidebar"
+                            data-drawer-toggle="logo-sidebar"
+                            aria-controls="logo-sidebar"
+                            type="button"
+                            class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 mr-2"
+                        >
+                            <span class="sr-only">Buka Menu</span>
+                            <svg
+                                class="w-6 h-6"
+                                aria-hidden="true"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    clip-rule="evenodd"
+                                    fill-rule="evenodd"
+                                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <a href="/dashboard" class="flex ms-2 md:me-24 gap-2">
+                            <span
+                                class="self-center text-lg font-bold sm:text-xl whitespace-nowrap dark:text-white"
+                                >Perpustakaan Kampus</span
+                            >
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center ms-3">
+                            <div class="flex items-center gap-2">
+                                <span
+                                    id="adminName"
+                                    class="hidden sm:block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                                    >Admin</span
+                                >
+                                <button
+                                    id="logoutBtn"
+                                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                >
+                                    <i class="fa-solid fa-power-off mr-1"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside
+            id="logo-sidebar"
+            class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+            aria-label="Sidebar"
+        >
+            <div
+                class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800"
+            >
+                <ul class="space-y-2 font-medium">
+                    <li>
+                        <a
+                            href="/dashboard"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-chart-line w-5 h-5 text-blue-600 dark:text-blue-500"
+                            ></i>
+                            <span class="ms-3 text-blue-600 dark:text-blue-500"
+                                >Dashboard</span
+                            >
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/buku"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-book w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Data Buku</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/peminjam"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-users w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Data Peminjam</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/peminjaman"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-right-from-bracket w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Peminjaman Buku</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="/pengembalian"
+                            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        >
+                            <i
+                                class="fa-solid fa-right-to-bracket w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            ></i>
+                            <span class="ms-3">Pengembalian Buku</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <div class="p-4 sm:ml-64">
+            <div class="p-4 mt-14 space-y-6">
+                <div
+                    class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                >
+                    <h5
+                        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                    >
+                        Portal Admin Perpustakaan
+                    </h5>
+                    <p
+                        class="mb-3 font-normal text-gray-700 dark:text-gray-400"
+                    >
+                        Selamat datang kembali! Di sini Anda dapat memantau stok
+                        buku perpustakaan, pencatatan peminjam, transaksi
+                        peminjaman, serta memproses pengembalian buku dan denda
+                        keterlambatan secara otomatis.
+                    </p>
+                </div>
+
+                <!-- Card Status -->
+                <div
+                    class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                >
+                    <!-- Card Status 1 -->
+                    <div
+                        class="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4"
+                    >
+                        <div
+                            class="w-12 h-12 rounded bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xl"
+                        >
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold"
+                                >Total Buku</span
+                            >
+                            <h4
+                                id="statBooks"
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                -
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Card Status 2 -->
+                    <div
+                        class="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4"
+                    >
+                        <div
+                            class="w-12 h-12 rounded bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 flex items-center justify-center text-xl"
+                        >
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold"
+                                >Peminjam</span
+                            >
+                            <h4
+                                id="statBorrowers"
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                -
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Card Status 3 -->
+                    <div
+                        class="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4"
+                    >
+                        <div
+                            class="w-12 h-12 rounded bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 flex items-center justify-center text-xl"
+                        >
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold"
+                                >Aktif Dipinjam</span
+                            >
+                            <h4
+                                id="statActiveLoans"
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                -
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Card Status 4 -->
+                    <div
+                        class="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4"
+                    >
+                        <div
+                            class="w-12 h-12 rounded bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 flex items-center justify-center text-xl"
+                        >
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold"
+                                >Terlambat</span
+                            >
+                            <h4
+                                id="statLateLoans"
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                -
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Card Status 5 -->
+                    <div
+                        class="p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4"
+                    >
+                        <div
+                            class="w-12 h-12 rounded bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center text-xl"
+                        >
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold"
+                                >Denda</span
+                            >
+                            <h4
+                                id="statDenda"
+                                class="text-xl font-bold text-gray-900 dark:text-white"
+                            >
+                                -
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Riwayat Peminjaman -->
+                <div
+                    class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 space-y-4"
+                >
+                    <div
+                        class="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-3"
+                    >
+                        <h3
+                            class="font-bold text-md text-gray-900 dark:text-white"
+                        >
+                            <i
+                                class="fa-solid fa-clock-rotate-left text-blue-600 mr-1"
+                            ></i>
+                            Riwayat Peminjaman
+                        </h3>
+                        <a
+                            href="/peminjaman"
+                            class="text-xs text-blue-600 dark:text-blue-500 hover:underline"
+                            >Lihat Semua</a
+                        >
+                    </div>
+                    <div
+                        class="relative overflow-x-auto shadow-md sm:rounded-lg border border-gray-200 dark:border-gray-700"
+                    >
+                        <table
+                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                            <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                            >
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Buku</th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Peminjam
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-center"
+                                    >
+                                        Tgl Pinjam
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-center"
+                                    >
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentLoansBody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flowbite & custom scripts -->
+        <script src="/vendor/flowbite/flowbite.min.js"></script>
+        <script src="../js/auth.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                // Check auth
+                const user = await checkAuth();
+                if (!user) return;
+
+                // Display username
+                document.getElementById("adminName").textContent =
+                    "Halo, " + user.username;
+
+                await fetchDashboardStats();
+
+                // Logout
+                document
+                    .getElementById("logoutBtn")
+                    .addEventListener("click", async (e) => {
+                        e.preventDefault();
+                        await logout();
+                    });
+            });
+
+            async function fetchDashboardStats() {
+                try {
+                    const [booksRes, borrowersRes, loansRes] =
+                        await Promise.all([
+                            fetch("/api/buku", { headers: getAuthHeaders() }),
+                            fetch("/api/peminjam", {
+                                headers: getAuthHeaders(),
+                            }),
+                            fetch("/api/peminjaman", {
+                                headers: getAuthHeaders(),
+                            }),
+                        ]);
+
+                    if (!booksRes.ok || !borrowersRes.ok || !loansRes.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+
+                    const books = await booksRes.json();
+                    const borrowers = await borrowersRes.json();
+                    const loans = await loansRes.json();
+
+                    // Calculate stats
+                    const totalBooks = books.length;
+                    const totalBorrowers = borrowers.length;
+
+                    const activeLoansList = loans.filter(
+                        (l) => l.status === "Dipinjam",
+                    );
+                    const totalActiveLoans = activeLoansList.length;
+
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const totalLateLoans = activeLoansList.filter((l) => {
+                        const deadline = new Date(l.tanggal_pengembalian);
+                        deadline.setHours(0, 0, 0, 0);
+                        return today > deadline;
+                    }).length;
+
+                    const totalDenda = loans.reduce(
+                        (sum, l) => sum + parseFloat(l.denda || 0),
+                        0,
+                    );
+
+                    // Update stats on DOM
+                    document.getElementById("statBooks").textContent =
+                        totalBooks;
+                    document.getElementById("statBorrowers").textContent =
+                        totalBorrowers;
+                    document.getElementById("statActiveLoans").textContent =
+                        totalActiveLoans;
+                    document.getElementById("statLateLoans").textContent =
+                        totalLateLoans;
+                    document.getElementById("statDenda").textContent =
+                        totalDenda > 0
+                            ? `Rp${totalDenda.toLocaleString("id-ID")}`
+                            : "Rp0";
+
+                    renderRecentActivities(loans.slice(0, 5));
+                } catch (error) {
+                    console.error("Error rendering dashboard:", error);
+                }
+            }
+
+            function renderRecentActivities(recentLoans) {
+                const container = document.getElementById("recentLoansBody");
+                if (!container) return;
+
+                if (recentLoans.length === 0) {
+                    container.innerHTML = `
+          <tr>
+            <td colspan="4" class="py-4 text-center text-gray-500 dark:text-gray-400">
+              Belum ada riwayat transaksi.
+            </td>
+          </tr>
+        `;
+                    return;
+                }
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                container.innerHTML = recentLoans
+                    .map((loan) => {
+                        let badge = "";
+
+                        const deadline = new Date(loan.tanggal_pengembalian);
+                        deadline.setHours(0, 0, 0, 0);
+
+                        if (loan.status === "Dikembalikan") {
+                            badge =
+                                '<span class="bg-green-100 text-green-800 text-[10px] font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Dikembalikan</span>';
+                        } else if (
+                            loan.status === "Dipinjam" &&
+                            today > deadline
+                        ) {
+                            badge =
+                                '<span class="bg-red-100 text-red-800 text-[10px] font-medium px-2 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Terlambat</span>';
+                        } else {
+                            badge =
+                                '<span class="bg-yellow-100 text-yellow-800 text-[10px] font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Dipinjam</span>';
+                        }
+
+                        const dateFormatted = new Date(
+                            loan.tanggal_peminjaman,
+                        ).toLocaleDateString("id-ID", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                        });
+
+                        return `
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate max-w-[150px]">${loan.judul_buku}</th>
+            <td class="px-4 py-3">${loan.nama_peminjam}</td>
+            <td class="px-4 py-3 text-center">${dateFormatted}</td>
+            <td class="px-4 py-3 text-center">${badge}</td>
+          </tr>
+        `;
+                    })
+                    .join("");
+            }
+        </script>
+    </body>
+</html>
