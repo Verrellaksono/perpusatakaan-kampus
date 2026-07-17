@@ -126,7 +126,7 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-6 py-3">NIK (Nomor Induk Kependudukan)</th>
+              <th scope="col" class="px-6 py-3">NIM (Nomor Induk Mahasiswa)</th>
               <th scope="col" class="px-6 py-3">Nama Lengkap</th>
               <th scope="col" class="px-6 py-3">Email</th>
               <th scope="col" class="px-6 py-3">No. Telepon</th>
@@ -159,18 +159,20 @@
           </button>
         </div>
         <!-- Modal body -->
-        <form id="addPeminjamForm" class="p-4 md:p-5 space-y-4">
+        <form id="addPeminjamForm" novalidate class="p-4 md:p-5 space-y-4">
           <div>
-            <label for="add_nik" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIK (Nomor Induk Kependudukan)</label>
-            <input type="text" id="add_nik" required pattern="\d{16}" title="NIK harus berupa 16 digit angka" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+            <label for="add_nim" id="add_nim_label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIM (Nomor Induk Mahasiswa)</label>
+            <input type="text" id="add_nim" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+            <p id="add_nim_help" class="mt-2 text-xs text-red-600 dark:text-red-500 hidden"></p>
           </div>
           <div>
             <label for="add_nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Lengkap</label>
             <input type="text" id="add_nama" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
           </div>
           <div>
-            <label for="add_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <label for="add_email" id="add_email_label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
             <input type="email" id="add_email" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+            <p id="add_email_help" class="mt-2 text-xs text-red-600 dark:text-red-500 hidden"></p>
           </div>
           <div>
             <label for="add_no_telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No. Telepon</label>
@@ -199,18 +201,19 @@
           </button>
         </div>
         <!-- Modal body -->
-        <form id="editPeminjamForm" class="p-4 md:p-5 space-y-4">
+        <form id="editPeminjamForm" novalidate class="p-4 md:p-5 space-y-4">
           <div>
-            <label for="edit_nik" class="block mb-2 text-sm font-medium text-gray-400 dark:text-gray-300">NIK (Tidak dapat diubah)</label>
-            <input type="text" id="edit_nik" readonly disabled class="bg-gray-100 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed">
+            <label for="edit_nim" class="block mb-2 text-sm font-medium text-gray-400 dark:text-gray-300">NIM (Tidak dapat diubah)</label>
+            <input type="text" id="edit_nim" readonly disabled class="bg-gray-100 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 cursor-not-allowed">
           </div>
           <div>
             <label for="edit_nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Lengkap</label>
             <input type="text" id="edit_nama" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
           </div>
           <div>
-            <label for="edit_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <label for="edit_email" id="edit_email_label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
             <input type="email" id="edit_email" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+            <p id="edit_email_help" class="mt-2 text-xs text-red-600 dark:text-red-500 hidden"></p>
           </div>
           <div>
             <label for="edit_no_telepon" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No. Telepon</label>

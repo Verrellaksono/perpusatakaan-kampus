@@ -6,7 +6,7 @@ class PeminjamanModel {
       SELECT 
         dp.id_detail,
         dp.id_peminjaman,
-        p.nik,
+        p.nim,
         p.nama AS nama_peminjam,
         b.id_buku,
         b.judul AS judul_buku,
@@ -18,7 +18,7 @@ class PeminjamanModel {
         dp.status
       FROM detail_peminjaman dp
       JOIN peminjaman pj ON dp.id_peminjaman = pj.id_peminjaman
-      JOIN peminjam p ON pj.nik = p.nik
+      JOIN peminjam p ON pj.nim = p.nim
       JOIN buku b ON dp.id_buku = b.id_buku
       ORDER BY pj.id_peminjaman DESC, dp.id_detail DESC;
     `;
@@ -31,7 +31,7 @@ class PeminjamanModel {
       SELECT 
         dp.id_detail,
         dp.id_peminjaman,
-        pj.nik,
+        pj.nim,
         b.id_buku,
         b.judul AS judul_buku,
         pj.tanggal_peminjaman,
@@ -49,7 +49,7 @@ class PeminjamanModel {
   }
 
   // Create a borrowing transaction
-  static async createLoan(nik, tanggal_pengembalian, id_buku_list) {
+  static async createLoan(nim, tanggal_pengembalian, id_buku_list) {
     const conn = await db.getConnection();
     try {
       await conn.beginTransaction();
@@ -57,9 +57,9 @@ class PeminjamanModel {
       // 1. Insert into peminjaman
       const tanggal_peminjaman = new Date().toISOString().split('T')[0];
       const [pjResult] = await conn.query(
-        `INSERT INTO peminjaman (nik, tanggal_peminjaman, tanggal_pengembalian) 
+        `INSERT INTO peminjaman (nim, tanggal_peminjaman, tanggal_pengembalian) 
          VALUES (?, ?, ?);`,
-        [nik, tanggal_peminjaman, tanggal_pengembalian]
+        [nim, tanggal_peminjaman, tanggal_pengembalian]
       );
       const id_peminjaman = pjResult.insertId;
 

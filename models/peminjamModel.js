@@ -6,8 +6,8 @@ class PeminjamModel {
     return rows;
   }
 
-  static async getByNik(nik) {
-    const [rows] = await db.query('SELECT * FROM peminjam WHERE nik = ?;', [nik]);
+  static async getByNim(nim) {
+    const [rows] = await db.query('SELECT * FROM peminjam WHERE nim = ?;', [nim]);
     return rows[0];
   }
 
@@ -17,37 +17,37 @@ class PeminjamModel {
   }
 
   static async create(peminjam) {
-    const { nik, nama, email, no_telepon } = peminjam;
+    const { nim, nama, email, no_telepon } = peminjam;
     const [result] = await db.query(
-      `INSERT INTO peminjam (nik, nama, email, no_telepon) 
+      `INSERT INTO peminjam (nim, nama, email, no_telepon) 
        VALUES (?, ?, ?, ?);`,
-      [nik, nama, email, no_telepon]
+      [nim, nama, email, no_telepon]
     );
     return result.affectedRows > 0;
   }
 
-  static async update(nik, peminjam) {
+  static async update(nim, peminjam) {
     const { nama, email, no_telepon } = peminjam;
     const [result] = await db.query(
       `UPDATE peminjam 
        SET nama = ?, email = ?, no_telepon = ? 
-       WHERE nik = ?;`,
-      [nama, email, no_telepon, nik]
+       WHERE nim = ?;`,
+      [nama, email, no_telepon, nim]
     );
     return result.affectedRows > 0;
   }
 
-  static async delete(nik) {
-    const [result] = await db.query('DELETE FROM peminjam WHERE nik = ?;', [nik]);
+  static async delete(nim) {
+    const [result] = await db.query('DELETE FROM peminjam WHERE nim = ?;', [nim]);
     return result.affectedRows > 0;
   }
 
-  static async hasLoans(nik) {
+  static async hasLoans(nim) {
     const [rows] = await db.query(
       `SELECT COUNT(*) AS total_loans 
        FROM peminjaman 
-       WHERE nik = ?;`,
-      [nik]
+       WHERE nim = ?;`,
+      [nim]
     );
     return rows[0].total_loans > 0;
   }

@@ -159,10 +159,10 @@ function removeBookFromList(id) {
 async function handleBorrowSubmit(e) {
   e.preventDefault();
 
-  const nik = document.getElementById('nik_select').value;
+  const nim = document.getElementById('nim_select').value;
   const tanggal_pengembalian = document.getElementById('tanggal_pengembalian').value;
 
-  if (!nik) {
+  if (!nim) {
     showToast('Silakan pilih peminjam terlebih dahulu.', 'error');
     return;
   }
@@ -180,7 +180,7 @@ async function handleBorrowSubmit(e) {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({
-        nik,
+        nim,
         tanggal_pengembalian,
         id_buku_list: selectedBookIds
       })
@@ -195,7 +195,7 @@ async function handleBorrowSubmit(e) {
       
       // Clear inputs
       selectedBookIds = [];
-      document.getElementById('nik_select').value = '';
+      document.getElementById('nim_select').value = '';
       document.getElementById('peminjam_search').value = '';
       if (document.getElementById('book_select')) document.getElementById('book_select').value = '';
       if (document.getElementById('buku_search')) document.getElementById('buku_search').value = '';
@@ -272,7 +272,7 @@ async function loadLoansList() {
           </th>
           <td class="px-6 py-4">
             <div class="font-medium text-gray-900 dark:text-white text-sm">${loan.nama_peminjam}</div>
-            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nik}</div>
+            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nim}</div>
           </td>
           <td class="px-6 py-4 text-center">${tglPinjam}</td>
           <td class="px-6 py-4 text-center">${tglBatas}</td>
@@ -350,7 +350,7 @@ function showToast(message, type = 'success') {
 function setupAutocompleteListeners() {
   const peminjamSearch = document.getElementById('peminjam_search');
   const peminjamDropdown = document.getElementById('peminjam_dropdown');
-  const nikSelect = document.getElementById('nik_select');
+  const nimSelect = document.getElementById('nim_select');
   
   if (peminjamSearch && peminjamDropdown) {
     peminjamSearch.addEventListener('focus', () => {
@@ -360,11 +360,11 @@ function setupAutocompleteListeners() {
     
     peminjamSearch.addEventListener('input', (e) => {
       const term = e.target.value.toLowerCase();
-      if (nikSelect.value) {
-        nikSelect.value = '';
+      if (nimSelect.value) {
+        nimSelect.value = '';
       }
       const filtered = allBorrowers.filter(b => 
-        b.nama.toLowerCase().includes(term) || b.nik.toLowerCase().includes(term)
+        b.nama.toLowerCase().includes(term) || b.nim.toLowerCase().includes(term)
       );
       renderBorrowerOptions(filtered);
     });
@@ -416,23 +416,23 @@ function renderBorrowerOptions(list) {
   
   container.innerHTML = list.map(b => `
     <li 
-      onclick="selectBorrower('${b.nik}', '${b.nama.replace(/'/g, "\\'")}')" 
+      onclick="selectBorrower('${b.nim}', '${b.nama.replace(/'/g, "\\'")}')" 
       class="px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-900 dark:text-white transition-colors duration-150"
     >
       <div class="font-semibold text-sm">${b.nama}</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-0.5">${b.nik}</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-0.5">${b.nim}</div>
     </li>
   `).join('');
 }
 
-function selectBorrower(nik, nama) {
+function selectBorrower(nim, nama) {
   const peminjamSearch = document.getElementById('peminjam_search');
   const peminjamDropdown = document.getElementById('peminjam_dropdown');
-  const nikSelect = document.getElementById('nik_select');
+  const nimSelect = document.getElementById('nim_select');
   
-  if (peminjamSearch && nikSelect) {
-    peminjamSearch.value = `${nama} (${nik})`;
-    nikSelect.value = nik;
+  if (peminjamSearch && nimSelect) {
+    peminjamSearch.value = `${nama} (${nim})`;
+    nimSelect.value = nim;
   }
   if (peminjamDropdown) {
     peminjamDropdown.classList.add('hidden');

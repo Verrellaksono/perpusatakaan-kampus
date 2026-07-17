@@ -150,6 +150,81 @@ async function loadBooks(search = "") {
     }
 }
 
+// Validation Helper Functions
+function setValidationError(inputId, labelId, helpId, message) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    const help = document.getElementById(helpId);
+
+    if (input && label && help) {
+        input.className =
+            "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-750 dark:border-red-500 dark:text-red-500 dark:placeholder-red-500";
+        label.className =
+            "block mb-2 text-sm font-medium text-red-700 dark:text-red-500";
+        help.textContent = message;
+        help.classList.remove("hidden");
+    }
+}
+
+function clearValidationError(inputId, labelId, helpId) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    const help = document.getElementById(helpId);
+
+    if (input && label && help) {
+        input.className =
+            "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white";
+        label.className =
+            "block mb-2 text-sm font-medium text-gray-900 dark:text-white";
+        help.classList.add("hidden");
+        help.textContent = "";
+    }
+}
+
+// Input listeners to clear validation errors
+if (document.getElementById("add_isbn")) {
+    document.getElementById("add_isbn").addEventListener("input", () => {
+        clearValidationError("add_isbn", "add_isbn_label", "add_isbn_help");
+    });
+}
+if (document.getElementById("add_tahun_terbit")) {
+    document
+        .getElementById("add_tahun_terbit")
+        .addEventListener("input", () => {
+            clearValidationError(
+                "add_tahun_terbit",
+                "add_tahun_terbit_label",
+                "add_tahun_terbit_help",
+            );
+        });
+}
+if (document.getElementById("add_stok")) {
+    document.getElementById("add_stok").addEventListener("input", () => {
+        clearValidationError("add_stok", "add_stok_label", "add_stok_help");
+    });
+}
+if (document.getElementById("edit_isbn")) {
+    document.getElementById("edit_isbn").addEventListener("input", () => {
+        clearValidationError("edit_isbn", "edit_isbn_label", "edit_isbn_help");
+    });
+}
+if (document.getElementById("edit_tahun_terbit")) {
+    document
+        .getElementById("edit_tahun_terbit")
+        .addEventListener("input", () => {
+            clearValidationError(
+                "edit_tahun_terbit",
+                "edit_tahun_terbit_label",
+                "edit_tahun_terbit_help",
+            );
+        });
+}
+if (document.getElementById("edit_stok")) {
+    document.getElementById("edit_stok").addEventListener("input", () => {
+        clearValidationError("edit_stok", "edit_stok_label", "edit_stok_help");
+    });
+}
+
 // Add Book Form Handler
 const addBookForm = document.getElementById("addBookForm");
 if (addBookForm) {
@@ -162,6 +237,49 @@ if (addBookForm) {
         const penerbit = document.getElementById("add_penerbit").value;
         const tahun_terbit = document.getElementById("add_tahun_terbit").value;
         const stok = document.getElementById("add_stok").value;
+
+        // Clear previous validation styling
+        clearValidationError("add_isbn", "add_isbn_label", "add_isbn_help");
+        clearValidationError(
+            "add_tahun_terbit",
+            "add_tahun_terbit_label",
+            "add_tahun_terbit_help",
+        );
+        clearValidationError("add_stok", "add_stok_label", "add_stok_help");
+
+        // Client-side validations
+        let isValid = true;
+        if (!/^\d{10,13}$/.test(isbn)) {
+            setValidationError(
+                "add_isbn",
+                "add_isbn_label",
+                "add_isbn_help",
+                "ISBN harus berupa 10-13 digit angka.",
+            );
+            isValid = false;
+        }
+        const tahunVal = parseInt(tahun_terbit, 10);
+        if (isNaN(tahunVal) || tahunVal < 1900 || tahunVal > 2026) {
+            setValidationError(
+                "add_tahun_terbit",
+                "add_tahun_terbit_label",
+                "add_tahun_terbit_help",
+                "Tahun terbit harus di antara 1900 dan 2026.",
+            );
+            isValid = false;
+        }
+        const stokVal = parseInt(stok, 10);
+        if (isNaN(stokVal) || stokVal < 0) {
+            setValidationError(
+                "add_stok",
+                "add_stok_label",
+                "add_stok_help",
+                "Stok tidak boleh 0 atau kurang dari 0.",
+            );
+            isValid = false;
+        }
+
+        if (!isValid) return;
 
         const submitBtn = addBookForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
@@ -183,7 +301,20 @@ if (addBookForm) {
             const data = await res.json();
 
             if (!res.ok) {
-                showToast(data.message || "Gagal menambahkan buku.", "error");
+                // Check if duplicate ISBN error
+                if (data.message && data.message.includes("ISBN")) {
+                    setValidationError(
+                        "add_isbn",
+                        "add_isbn_label",
+                        "add_isbn_help",
+                        data.message,
+                    );
+                } else {
+                    showToast(
+                        data.message || "Gagal menambahkan buku.",
+                        "error",
+                    );
+                }
             } else {
                 showToast("Buku berhasil ditambahkan!", "success");
                 addBookForm.reset();
@@ -225,6 +356,15 @@ async function openEditModal(id) {
         document.getElementById("edit_tahun_terbit").value = book.tahun_terbit;
         document.getElementById("edit_stok").value = book.stok;
 
+        // Clear previous validation styling
+        clearValidationError("edit_isbn", "edit_isbn_label", "edit_isbn_help");
+        clearValidationError(
+            "edit_tahun_terbit",
+            "edit_tahun_terbit_label",
+            "edit_tahun_terbit_help",
+        );
+        clearValidationError("edit_stok", "edit_stok_label", "edit_stok_help");
+
         // Show modal
         const modalElement = document.getElementById("edit-book-modal");
         if (!modalElement) {
@@ -256,11 +396,51 @@ if (editBookForm) {
         const judul = document.getElementById("edit_judul").value;
         const penulis = document.getElementById("edit_penulis").value;
         const penerbit = document.getElementById("edit_penerbit").value;
-        // Mengonversi input tahun dan stok menjadi angka (Number)
-        const tahun_terbit = Number(
-            document.getElementById("edit_tahun_terbit").value,
+        const tahun_terbit = document.getElementById("edit_tahun_terbit").value;
+        const stok = document.getElementById("edit_stok").value;
+
+        // Clear previous validation styling
+        clearValidationError("edit_isbn", "edit_isbn_label", "edit_isbn_help");
+        clearValidationError(
+            "edit_tahun_terbit",
+            "edit_tahun_terbit_label",
+            "edit_tahun_terbit_help",
         );
-        const stok = Number(document.getElementById("edit_stok").value);
+        clearValidationError("edit_stok", "edit_stok_label", "edit_stok_help");
+
+        // Client-side validations
+        let isValid = true;
+        if (!/^\d{10,13}$/.test(isbn)) {
+            setValidationError(
+                "edit_isbn",
+                "edit_isbn_label",
+                "edit_isbn_help",
+                "ISBN harus berupa 10-13 digit angka.",
+            );
+            isValid = false;
+        }
+        const tahunVal = parseInt(tahun_terbit, 10);
+        if (isNaN(tahunVal) || tahunVal < 1900 || tahunVal > 2026) {
+            setValidationError(
+                "edit_tahun_terbit",
+                "edit_tahun_terbit_label",
+                "edit_tahun_terbit_help",
+                "Tahun terbit harus di antara 1900 dan 2026.",
+            );
+            isValid = false;
+        }
+        const stokVal = parseInt(stok, 10);
+        if (isNaN(stokVal) || stokVal < 0) {
+            setValidationError(
+                "edit_stok",
+                "edit_stok_label",
+                "edit_stok_help",
+                "Stok tidak boleh negatif.",
+            );
+            isValid = false;
+        }
+
+        if (!isValid) return;
 
         // Menemukan tombol submit dan mendisable-nya (mencegah double-click/spam)
         const submitBtn = editBookForm.querySelector('button[type="submit"]');
@@ -278,8 +458,8 @@ if (editBookForm) {
                 judul,
                 penulis,
                 penerbit,
-                tahun_terbit,
-                stok,
+                tahun_terbit: Number(tahun_terbit),
+                stok: Number(stok),
             });
 
             const res = await fetch(`/api/buku/${currentEditId}`, {
@@ -290,8 +470,8 @@ if (editBookForm) {
                     judul,
                     penulis,
                     penerbit,
-                    tahun_terbit,
-                    stok,
+                    tahun_terbit: Number(tahun_terbit),
+                    stok: Number(stok),
                 }),
             });
 
@@ -302,7 +482,19 @@ if (editBookForm) {
 
             // Validasi respons API
             if (!res.ok) {
-                showToast(data.message || "Gagal memperbarui buku.", "error");
+                if (data.message && data.message.includes("ISBN")) {
+                    setValidationError(
+                        "edit_isbn",
+                        "edit_isbn_label",
+                        "edit_isbn_help",
+                        data.message,
+                    );
+                } else {
+                    showToast(
+                        data.message || "Gagal memperbarui buku.",
+                        "error",
+                    );
+                }
             } else {
                 showToast("Buku berhasil diperbarui!", "success");
 

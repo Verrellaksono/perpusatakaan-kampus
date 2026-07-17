@@ -27,14 +27,3 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
-
-# Uploads directory
-# Keep the directory but ignore its contents
-public/uploads/*
-!public/uploads/.gitkeep
-
-# Agent AI
-.agents/
-.gemini/
-AGENTS.md
-

@@ -73,15 +73,15 @@ async function loadBorrowers() {
             .map(
                 (b) => `
       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-        <th scope="row" class="px-6 py-4 font-mono font-medium text-gray-900 whitespace-nowrap dark:text-white">${b.nik}</th>
+        <th scope="row" class="px-6 py-4 font-mono font-medium text-gray-900 whitespace-nowrap dark:text-white">${b.nim}</th>
         <td class="px-6 py-4 font-semibold">${b.nama}</td>
         <td class="px-6 py-4">${b.email}</td>
         <td class="px-6 py-4 font-mono text-sm">${b.no_telepon}</td>
         <td class="px-6 py-4 text-center">
-          <button onclick="openEditModal('${b.nik}')" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-3">
+          <button onclick="openEditModal('${b.nim}')" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-3">
             <i class="fa-solid fa-pen-to-square"></i> Edit
           </button>
-          <button onclick="deleteBorrower('${b.nik}', '${b.nama.replace(/'/g, "\\'")}')" class="font-medium text-red-600 dark:text-red-500 hover:underline">
+          <button onclick="deleteBorrower('${b.nim}', '${b.nama.replace(/'/g, "\\'")}')" class="font-medium text-red-600 dark:text-red-500 hover:underline">
             <i class="fa-solid fa-trash"></i> Hapus
           </button>
         </td>
@@ -101,16 +101,83 @@ async function loadBorrowers() {
     }
 }
 
+// Validation Helper Functions
+function setValidationError(inputId, labelId, helpId, message) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    const help = document.getElementById(helpId);
+
+    if (input && label && help) {
+        // Error class for Flowbite input
+        input.className = "bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-gray-750 dark:border-red-500 dark:text-red-500 dark:placeholder-red-500";
+        // Error class for Flowbite label
+        label.className = "block mb-2 text-sm font-medium text-red-700 dark:text-red-500";
+        // Help text
+        help.textContent = message;
+        help.classList.remove('hidden');
+    }
+}
+
+function clearValidationError(inputId, labelId, helpId) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    const help = document.getElementById(helpId);
+
+    if (input && label && help) {
+        // Default class for Flowbite input
+        input.className = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white";
+        // Default class for Flowbite label
+        label.className = "block mb-2 text-sm font-medium text-gray-900 dark:text-white";
+        // Hide help text
+        help.classList.add('hidden');
+        help.textContent = '';
+    }
+}
+
+// Add input event listeners to dynamically clear error style
+if (document.getElementById("add_nim")) {
+    document.getElementById("add_nim").addEventListener("input", () => {
+        clearValidationError("add_nim", "add_nim_label", "add_nim_help");
+    });
+}
+if (document.getElementById("add_email")) {
+    document.getElementById("add_email").addEventListener("input", () => {
+        clearValidationError("add_email", "add_email_label", "add_email_help");
+    });
+}
+if (document.getElementById("edit_email")) {
+    document.getElementById("edit_email").addEventListener("input", () => {
+        clearValidationError("edit_email", "edit_email_label", "edit_email_help");
+    });
+}
+
 // Add Borrower Submit Handler
 const addPeminjamForm = document.getElementById("addPeminjamForm");
 if (addPeminjamForm) {
     addPeminjamForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const nik = document.getElementById("add_nik").value;
+        const nim = document.getElementById("add_nim").value;
         const nama = document.getElementById("add_nama").value;
         const email = document.getElementById("add_email").value;
         const no_telepon = document.getElementById("add_no_telepon").value;
+
+        // Clear previous validation styling
+        clearValidationError("add_nim", "add_nim_label", "add_nim_help");
+        clearValidationError("add_email", "add_email_label", "add_email_help");
+
+        // Client-side validations
+        let isValid = true;
+        if (!/^\d{7,15}$/.test(nim)) {
+            setValidationError("add_nim", "add_nim_label", "add_nim_help", "NIM harus berupa 7-15 digit angka.");
+            isValid = false;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setValidationError("add_email", "add_email_label", "add_email_help", "Format Email tidak valid.");
+            isValid = false;
+        }
+
+        if (!isValid) return;
 
         const submitBtn = addPeminjamForm.querySelector(
             'button[type="submit"]',
@@ -121,16 +188,20 @@ if (addPeminjamForm) {
             const res = await fetch("/api/peminjam", {
                 method: "POST",
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ nik, nama, email, no_telepon }),
+                body: JSON.stringify({ nim, nama, email, no_telepon }),
             });
 
             const data = await res.json();
 
             if (!res.ok) {
-                showToast(
-                    data.message || "Gagal menambahkan peminjam.",
-                    "error",
-                );
+                // If it is duplicate error, show Flowbite error styling
+                if (data.message && data.message.includes("NIM")) {
+                    setValidationError("add_nim", "add_nim_label", "add_nim_help", data.message);
+                } else if (data.message && data.message.includes("Email")) {
+                    setValidationError("add_email", "add_email_label", "add_email_help", data.message);
+                } else {
+                    showToast(data.message || "Gagal menambahkan peminjam.", "error");
+                }
             } else {
                 showToast("Peminjam berhasil ditambahkan!", "success");
                 addPeminjamForm.reset();
@@ -154,17 +225,19 @@ if (addPeminjamForm) {
 }
 
 // Edit Borrower Loader & Submit
-let currentEditNik = null;
-async function openEditModal(nik) {
-    currentEditNik = nik;
+let currentEditNim = null;
+async function openEditModal(nim) {
+    currentEditNim = nim;
+    // Clear previous errors when opening edit modal
+    clearValidationError("edit_email", "edit_email_label", "edit_email_help");
     try {
-        const res = await fetch(`/api/peminjam/${nik}`, {
+        const res = await fetch(`/api/peminjam/${nim}`, {
             headers: getAuthHeaders(),
         });
         if (!res.ok) throw new Error();
         const borrower = await res.json();
 
-        document.getElementById("edit_nik").value = borrower.nik;
+        document.getElementById("edit_nim").value = borrower.nim;
         document.getElementById("edit_nama").value = borrower.nama;
         document.getElementById("edit_email").value = borrower.email;
         document.getElementById("edit_no_telepon").value = borrower.no_telepon;
@@ -198,11 +271,20 @@ const editPeminjamForm = document.getElementById("editPeminjamForm");
 if (editPeminjamForm) {
     editPeminjamForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        if (!currentEditNik) return;
+        if (!currentEditNim) return;
 
         const nama = document.getElementById("edit_nama").value;
         const email = document.getElementById("edit_email").value;
         const no_telepon = document.getElementById("edit_no_telepon").value;
+
+        // Clear previous errors
+        clearValidationError("edit_email", "edit_email_label", "edit_email_help");
+
+        // Client-side validations
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setValidationError("edit_email", "edit_email_label", "edit_email_help", "Format Email tidak valid.");
+            return;
+        }
 
         const submitBtn = editPeminjamForm.querySelector(
             'button[type="submit"]',
@@ -210,7 +292,7 @@ if (editPeminjamForm) {
         submitBtn.disabled = true;
 
         try {
-            const res = await fetch(`/api/peminjam/${currentEditNik}`, {
+            const res = await fetch(`/api/peminjam/${currentEditNim}`, {
                 method: "PUT",
                 headers: getAuthHeaders(),
                 body: JSON.stringify({ nama, email, no_telepon }),
@@ -219,10 +301,14 @@ if (editPeminjamForm) {
             const data = await res.json();
 
             if (!res.ok) {
-                showToast(
-                    data.message || "Gagal memperbarui data peminjam.",
-                    "error",
-                );
+                if (data.message && data.message.includes("Email")) {
+                    setValidationError("edit_email", "edit_email_label", "edit_email_help", data.message);
+                } else {
+                    showToast(
+                        data.message || "Gagal memperbarui data peminjam.",
+                        "error",
+                    );
+                }
             } else {
                 showToast("Peminjam berhasil diperbarui!", "success");
 
@@ -245,14 +331,14 @@ if (editPeminjamForm) {
 }
 
 // Delete Borrower
-async function deleteBorrower(nik, name) {
+async function deleteBorrower(nim, name) {
     showConfirmModal({
         title: "Hapus Peminjam",
-        message: `Apakah Anda yakin ingin menghapus peminjam <strong>"${name}"</strong> dengan NIK <strong>${nik}</strong>?`,
+        message: `Apakah Anda yakin ingin menghapus peminjam <strong>"${name}"</strong> dengan NIM <strong>${nim}</strong>?`,
         confirmText: "Ya, Hapus",
         onConfirm: async () => {
             try {
-                const res = await fetch(`/api/peminjam/${nik}`, {
+                const res = await fetch(`/api/peminjam/${nim}`, {
                     method: "DELETE",
                     headers: getAuthHeaders(),
                 });

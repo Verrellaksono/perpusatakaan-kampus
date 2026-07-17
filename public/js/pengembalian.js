@@ -111,7 +111,7 @@ async function loadActiveLoans() {
           </th>
           <td class="px-6 py-4">
             <div class="font-medium text-gray-900 dark:text-white text-sm">${loan.nama_peminjam}</div>
-            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nik}</div>
+            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nim}</div>
           </td>
           <td class="px-6 py-4 text-center">${tglPinjam}</td>
           <td class="px-6 py-4 text-center">${tglBatas}</td>
@@ -257,7 +257,7 @@ async function loadReturnHistory() {
           </th>
           <td class="px-6 py-4">
             <div class="font-medium text-gray-900 dark:text-white text-sm">${loan.nama_peminjam}</div>
-            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nik}</div>
+            <div class="text-gray-500 dark:text-gray-400 text-xs font-mono">${loan.nim}</div>
           </td>
           <td class="px-6 py-4 text-center">${tglPinjam}</td>
           <td class="px-6 py-4 text-center">${tglBatas}</td>

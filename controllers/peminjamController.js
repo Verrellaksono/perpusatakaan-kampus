@@ -11,10 +11,10 @@ class PeminjamController {
     }
   }
 
-  static async getByNik(req, res) {
+  static async getByNim(req, res) {
     try {
-      const { nik } = req.params;
-      const borrower = await PeminjamModel.getByNik(nik);
+      const { nim } = req.params;
+      const borrower = await PeminjamModel.getByNim(nim);
       if (!borrower) {
         return res.status(404).json({ message: 'Peminjam tidak ditemukan.' });
       }
@@ -27,17 +27,17 @@ class PeminjamController {
 
   static async create(req, res) {
     try {
-      const { nik, nama, email, no_telepon } = req.body;
+      const { nim, nama, email, no_telepon } = req.body;
 
       // Basic validations
-      if (!nik || !nama || !email || !no_telepon) {
+      if (!nim || !nama || !email || !no_telepon) {
         return res.status(400).json({ message: 'Semua field wajib diisi.' });
       }
 
-      // Check unique NIK
-      const existingNik = await PeminjamModel.getByNik(nik);
-      if (existingNik) {
-        return res.status(400).json({ message: 'Peminjam dengan NIK tersebut sudah terdaftar.' });
+      // Check unique NIM
+      const existingNim = await PeminjamModel.getByNim(nim);
+      if (existingNim) {
+        return res.status(400).json({ message: 'Peminjam dengan NIM tersebut sudah terdaftar.' });
       }
 
       // Check unique Email
@@ -46,7 +46,7 @@ class PeminjamController {
         return res.status(400).json({ message: 'Email sudah digunakan.' });
       }
 
-      await PeminjamModel.create({ nik, nama, email, no_telepon });
+      await PeminjamModel.create({ nim, nama, email, no_telepon });
 
       return res.status(201).json({ message: 'Peminjam berhasil ditambahkan.' });
 
@@ -58,7 +58,7 @@ class PeminjamController {
 
   static async update(req, res) {
     try {
-      const { nik } = req.params;
+      const { nim } = req.params;
       const { nama, email, no_telepon } = req.body;
 
       // Basic validations
@@ -66,18 +66,18 @@ class PeminjamController {
         return res.status(400).json({ message: 'Semua field wajib diisi.' });
       }
 
-      const borrower = await PeminjamModel.getByNik(nik);
+      const borrower = await PeminjamModel.getByNim(nim);
       if (!borrower) {
         return res.status(404).json({ message: 'Peminjam tidak ditemukan.' });
       }
 
       // Check unique Email for other borrowers
       const existingEmail = await PeminjamModel.getByEmail(email);
-      if (existingEmail && existingEmail.nik !== nik) {
+      if (existingEmail && existingEmail.nim !== nim) {
         return res.status(400).json({ message: 'Email sudah digunakan oleh peminjam lain.' });
       }
 
-      await PeminjamModel.update(nik, { nama, email, no_telepon });
+      await PeminjamModel.update(nim, { nama, email, no_telepon });
 
       return res.status(200).json({ message: 'Data peminjam berhasil diperbarui.' });
 
@@ -89,20 +89,20 @@ class PeminjamController {
 
   static async delete(req, res) {
     try {
-      const { nik } = req.params;
+      const { nim } = req.params;
 
-      const borrower = await PeminjamModel.getByNik(nik);
+      const borrower = await PeminjamModel.getByNim(nim);
       if (!borrower) {
         return res.status(404).json({ message: 'Peminjam tidak ditemukan.' });
       }
 
       // Check if borrower has borrowing history
-      const hasLoans = await PeminjamModel.hasLoans(nik);
+      const hasLoans = await PeminjamModel.hasLoans(nim);
       if (hasLoans) {
         return res.status(400).json({ message: 'Peminjam tidak boleh dihapus karena memiliki riwayat peminjaman.' });
       }
 
-      await PeminjamModel.delete(nik);
+      await PeminjamModel.delete(nim);
       return res.status(200).json({ message: 'Peminjam berhasil dihapus.' });
 
     } catch (error) {

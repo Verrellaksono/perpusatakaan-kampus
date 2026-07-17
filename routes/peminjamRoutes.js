@@ -7,9 +7,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.use(authMiddleware);
 
 router.get('/', PeminjamController.getAll);
-router.get('/:nik', PeminjamController.getByNik);
+router.get('/:nim', PeminjamController.getByNim);
 router.post('/', PeminjamController.create);
-router.put('/:nik', PeminjamController.update);
-router.delete('/:nik', PeminjamController.delete);
+router.put('/:nim', PeminjamController.update);
+router.delete('/:nim', PeminjamController.delete);
 
 module.exports = router;

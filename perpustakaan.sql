@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS buku (
 
 -- 2. Tabel Peminjam
 CREATE TABLE IF NOT EXISTS peminjam (
-    nik VARCHAR(20) PRIMARY KEY,
+    nim VARCHAR(20) PRIMARY KEY,
     nama VARCHAR(150) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     no_telepon VARCHAR(20) NOT NULL
@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS peminjam (
 -- 3. Tabel Peminjaman (Transaksi Utama)
 CREATE TABLE IF NOT EXISTS peminjaman (
     id_peminjaman INT AUTO_INCREMENT PRIMARY KEY,
-    nik VARCHAR(20) NOT NULL,
+    nim VARCHAR(20) NOT NULL,
     tanggal_peminjaman DATE NOT NULL,
     tanggal_pengembalian DATE NOT NULL, -- Batas waktu harus kembali
-    FOREIGN KEY (nik) REFERENCES peminjam(nik) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (nim) REFERENCES peminjam(nim) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
 -- 4. Tabel Detail Peminjaman (Junction Table)

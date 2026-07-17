@@ -1,26 +1,33 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Akses ditolak. Token tidak ditemukan.' });
-  }
+    const authHeader = req.headers["authorization"];
 
-  const token = authHeader.split(' ')[1]; // Expecting "Bearer <token>"
+    if (!authHeader) {
+        return res
+            .status(401)
+            .json({ message: "Akses ditolak. Token tidak ditemukan." });
+    }
 
-  if (!token) {
-    return res.status(401).json({ message: 'Format token tidak valid.' });
-  }
+    const token = authHeader.split(" ")[1];
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'perpustakaan_kampus_secret_key_2026');
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(403).json({ message: 'Token tidak valid atau kedaluwarsa.' });
-  }
+    if (!token) {
+        return res.status(401).json({ message: "Format token tidak valid." });
+    }
+
+    try {
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET || "perpustakaan_kampus_secret_key_2026",
+        );
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res
+            .status(403)
+            .json({ message: "Token tidak valid atau kedaluwarsa." });
+    }
 };
 
 module.exports = authMiddleware;
